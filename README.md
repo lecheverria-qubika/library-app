@@ -28,29 +28,6 @@ scripts/
   init-users.sql    # Script to initialize users
 ```
 
-## Installation
-
-1. Install dependencies:
-```bash
-npm install
-```
-
-2. Configure environment variables:
-Create a `.env` file in the project root with the following content:
-
-```env
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=rootpassword
-DB_NAME=library_db
-
-JWT_SECRET=your_super_secret_key_here
-JWT_EXPIRES_IN=24h
-
-PORT=3000
-```
-
 ## Database with Docker
 
 Start MySQL with Docker Compose:
@@ -81,12 +58,6 @@ After the initialization script runs, you'll have:
 
 ## Running the Application
 
-### Development mode:
-```bash
-npm run dev
-```
-
-### Production mode:
 ```bash
 npm run build
 npm start
