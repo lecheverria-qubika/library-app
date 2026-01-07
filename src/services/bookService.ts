@@ -19,29 +19,52 @@ export class BookService {
     return this.bookRepository.findById(id);
   }
 
-  async getBooksByAuthor(authorId: number): Promise<Book[]> {
+  async getBooksByAuthor(authorId: number): Promise<{statusCode: number; books: Book[] | null; error: string | null}> {
+    
     const author = await this.authorRepository.findById(authorId);
+   
     if (!author) {
-      throw new Error('Author not found');
+      return {
+        statusCode: 404,
+        books: null,
+        error: 'Author not found'
+      };
     }
-    return this.bookRepository.findByAuthorId(authorId);
+
+    const books = await this.bookRepository.findByAuthorId(authorId);
+    
+    return {
+      statusCode: 200,
+      books,
+      error: null
+    };
   }
 
   async getBooksOrderedByPublicationDate(): Promise<Book[]> {
     return this.bookRepository.findAllOrderedByPublicationDate();
   }
 
-  async createBook(title: string, authorId: number, publicationDate: Date): Promise<Book> {
-    if (!title || !authorId || !publicationDate) {
-      throw new Error('Title, author and publication date are required');
-    }
+  async createBook(title: string, authorId: number, publicationDate: Date): Promise<{
+    statusCode: number; book: Book | null; error: string | null
+  }> {
 
     const author = await this.authorRepository.findById(authorId);
+
     if (!author) {
-      throw new Error('Author not found');
+      return {
+        statusCode: 404,
+        book: null,
+        error: 'Author not found'
+      };
     }
 
-    return this.bookRepository.create(title, authorId, publicationDate);
+    const book = await this.bookRepository.create(title, authorId, publicationDate);
+
+    return {
+      statusCode: 201,
+      book,
+      error: null
+    };
   }
 }
 

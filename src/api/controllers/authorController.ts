@@ -12,9 +12,9 @@ export class AuthorController {
 
     try {
       const authors = await this.authorService.getAllAuthors();
-      res.json(authors);
+      res.status(200).json(authors);
     } catch (error: any) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ error: "Something went wrong" });
     }
   };
 
@@ -29,9 +29,9 @@ export class AuthorController {
         return;
       }
 
-      res.json(author);
+      res.status(200).json(author);
     } catch (error: any) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ error: "Something went wrong" });
     }
   };
 
@@ -45,20 +45,22 @@ export class AuthorController {
         return;
       }
 
-      const author = await this.authorService.createAuthor(firstName, lastName);
-      res.status(201).json(author);
+      const { statusCode, ...result } = await this.authorService.createAuthor(firstName, lastName);
+
+      res.status(statusCode).json(result);
+
     } catch (error: any) {
-      res.status(400).json({ error: error.message });
+      res.status(500).json({ error: "Something went wrong" });
     }
-  };
+  }; 
 
   getAuthorsOrderedByBookCount = async (req: Request, res: Response): Promise<void> => {
     
     try {
       const authors = await this.authorService.getAuthorsOrderedByBookCount();
-      res.json(authors);
+      res.status(200).json(authors);
     } catch (error: any) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ error: 'Something went wrong' });
     }
   };
 }

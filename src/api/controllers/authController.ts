@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { AuthService } from '../../services/authService';
 
 export class AuthController {
+
   private authService: AuthService;
 
   constructor() {
@@ -9,6 +10,7 @@ export class AuthController {
   }
 
   login = async (req: Request, res: Response): Promise<void> => {
+
     try {
       const { username, password } = req.body;
 
@@ -17,15 +19,18 @@ export class AuthController {
         return;
       }
 
-      const result = await this.authService.login(username, password);
-      res.json(result);
+      const  { statusCode, ...result } = await this.authService.login(username, password);
+      res.status(statusCode).json(result);
+
     } catch (error: any) {
-      res.status(401).json({ error: error.message });
+      res.status(500).json({ error: "Something went wrong" });
     }
   };
 
   register = async (req: Request, res: Response): Promise<void> => {
+
     try {
+
       const { username, password, role } = req.body;
 
       if (!username || !password) {
@@ -33,10 +38,11 @@ export class AuthController {
         return;
       }
 
-      const user = await this.authService.register(username, password, role);
-      res.status(201).json(user);
+      const { statusCode, ...result } = await this.authService.register(username, password, role);
+      res.status(statusCode).json(result);
+
     } catch (error: any) {
-      res.status(400).json({ error: error.message });
+      res.status(500).json({ error: "Something went wrong" });
     }
   };
 }

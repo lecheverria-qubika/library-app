@@ -16,11 +16,15 @@ export class AuthorService {
     return this.authorRepository.findById(id);
   }
 
-  async createAuthor(firstName: string, lastName: string): Promise<Author> {
-    if (!firstName || !lastName) {
-      throw new Error('First name and last name are required');
-    }
-    return this.authorRepository.create(firstName, lastName);
+  async createAuthor(firstName: string, lastName: string): Promise<{statusCode: number; author: Author | null; error: string | null}> {
+
+    const author = await this.authorRepository.create(firstName, lastName);
+   
+    return {
+      statusCode: 201,
+      author,
+      error: null
+    };
   }
 
   async getAuthorsOrderedByBookCount(): Promise<AuthorWithBookCount[]> {
